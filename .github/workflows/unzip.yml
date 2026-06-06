@@ -1,4 +1,4 @@
-name: Step by Step Unzip NFT Images
+name: Manual Step Unzip NFT Images
 
 on:
   workflow_dispatch:
@@ -13,34 +13,107 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create Images Directory
-        run: mkdir -p images
-
-      - name: Process and Push Each Zip Sequentially
+      - name: Configure Git
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          
-          for i in {1..11}; do
-            file="part${i}.zip"
-            if [ -f "$file" ]; then
-              echo "----------------------------------------"
-              echo "Processing: $file"
-              echo "----------------------------------------"
-              
-              # Unzip without deleting the source zip file
-              unzip -q -o "$file" -d images/
-              
-              # Add only the images directory to git
-              git add images/
-              
-              if ! git diff-index --quiet HEAD --; then
-                git commit -m "Add images from $file"
-                git pull origin main --rebase
-                git push origin main
-                echo "Successfully processed and pushed images from $file"
-              else
-                echo "No new images detected or already processed for $file"
-              fi
-            fi
-          done
+          mkdir -p images
+
+      - name: Process Part 1
+        if: always()
+        run: |
+          if [ -f "part1.zip" ]; then
+            unzip -q -o "part1.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part1" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 2
+        if: always()
+        run: |
+          if [ -f "part2.zip" ]; then
+            unzip -q -o "part2.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part2" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 3
+        if: always()
+        run: |
+          if [ -f "part3.zip" ]; then
+            unzip -q -o "part3.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part3" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 4
+        if: always()
+        run: |
+          if [ -f "part4.zip" ]; then
+            unzip -q -o "part4.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part4" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 5
+        if: always()
+        run: |
+          if [ -f "part5.zip" ]; then
+            unzip -q -o "part5.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part5" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 6
+        if: always()
+        run: |
+          if [ -f "part6.zip" ]; then
+            unzip -q -o "part6.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part6" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 7
+        if: always()
+        run: |
+          if [ -f "part7.zip" ]; then
+            unzip -q -o "part7.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part7" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 8
+        if: always()
+        run: |
+          if [ -f "part8.zip" ]; then
+            unzip -q -o "part8.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part8" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 9
+        if: always()
+        run: |
+          if [ -f "part9.zip" ]; then
+            unzip -q -o "part9.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part9" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 10
+        if: always()
+        run: |
+          if [ -f "part10.zip" ]; then
+            unzip -q -o "part10.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part10" && git pull origin main --rebase && git push origin main)
+          fi
+
+      - name: Process Part 11
+        if: always()
+        run: |
+          if [ -f "part11.zip" ]; then
+            unzip -q -o "part11.zip" -d images/
+            git add images/
+            git diff-index --quiet HEAD -- || (git commit -m "Add part11" && git pull origin main --rebase && git push origin main)
+          fi
