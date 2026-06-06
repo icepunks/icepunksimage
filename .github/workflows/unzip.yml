@@ -1,0 +1,35 @@
+name: Unzip NFT Images
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip-process:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create Images Directory
+        run: mkdir -p images
+
+      - name: Unzip All Parts
+        run: |
+          for file in part*.zip; do
+            if [ -f "$file" ]; then
+              echo "Unzipping $file..."
+              unzip -o "$file" -d images/
+            fi
+          done
+
+      - name: Clean Up Zip Files
+        run: rm -f part*.zip
+
+      - name: Commit and Push Unzipped Images
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add images/
+          git commit -am "Add unzipped NFT images"
+          git push origin main
