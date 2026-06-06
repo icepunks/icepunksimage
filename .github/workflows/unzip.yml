@@ -1,0 +1,49 @@
+name: Step by Step Unzip NFT Images
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip-process:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Images Directory
+        run: mkdir -p images
+
+      - name: Process and Push Each Zip Sequentially
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          shopt -s nullglob
+          
+          for i in {1..11}; do
+            file="part${i}.zip"
+            if [ -f "$file" ]; then
+              echo "----------------------------------------"
+              echo "Starting production on: $file"
+              echo "----------------------------------------"
+              
+              unzip -q -o "$file" -d images/
+              rm -f "$file"
+              
+              git add images/ "$file"
+              
+              if ! git diff-index --quiet HEAD --; then
+                git commit -m "Add images from $file and clean up"
+                
+                # Pull before pushing to avoid conflicts between loops
+                git pull origin main --rebase
+                git push origin main
+                echo "Successfully processed and pushed $file"
+              else
+                echo "No new changes detected for $file"
+              fi
+            fi
+          done
