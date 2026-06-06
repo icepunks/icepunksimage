@@ -14,22 +14,29 @@ jobs:
       - name: Create Images Directory
         run: mkdir -p images
 
-      - name: Unzip All Parts
+      - name: Find and Unzip All Parts
         run: |
-          for file in part*.zip; do
+          shopt -s nullglob
+          for file in [Pp]art*.zip; do
             if [ -f "$file" ]; then
-              echo "Unzipping $file..."
-              unzip -o "$file" -d images/
+              echo "Processing $file..."
+              unzip -q -o "$file" -d images/
             fi
           done
 
       - name: Clean Up Zip Files
-        run: rm -f part*.zip
+        run: |
+          shopt -s nullglob
+          rm -f [Pp]art*.zip
 
       - name: Commit and Push Unzipped Images
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add images/
-          git commit -am "Add unzipped NFT images"
-          git push origin main
+          if git diff-index --quiet HEAD --; then
+            echo "No changes to commit"
+          else
+            git commit -m "Add unzipped NFT images via GitHub Actions"
+            git push origin main
+          fi
