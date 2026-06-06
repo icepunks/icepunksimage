@@ -21,29 +21,26 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          shopt -s nullglob
-          
           for i in {1..11}; do
             file="part${i}.zip"
             if [ -f "$file" ]; then
               echo "----------------------------------------"
-              echo "Starting production on: $file"
+              echo "Processing: $file"
               echo "----------------------------------------"
               
+              # Unzip without deleting the source zip file
               unzip -q -o "$file" -d images/
-              rm -f "$file"
               
-              git add images/ "$file"
+              # Add only the images directory to git
+              git add images/
               
               if ! git diff-index --quiet HEAD --; then
-                git commit -m "Add images from $file and clean up"
-                
-                # Pull before pushing to avoid conflicts between loops
+                git commit -m "Add images from $file"
                 git pull origin main --rebase
                 git push origin main
-                echo "Successfully processed and pushed $file"
+                echo "Successfully processed and pushed images from $file"
               else
-                echo "No new changes detected for $file"
+                echo "No new images detected or already processed for $file"
               fi
             fi
           done
